@@ -18,7 +18,7 @@ data "aws_eks_cluster_auth" "clutertoken" {
 
 data "aws_eks_node_group" "ng_info" {
   cluster_name     = data.aws_eks_cluster.example.name
-  node_group_name  = "your-node-group-name"  # Replace with the actual node group name
+  node_group_name  = data.aws_eks_cluster.example.node_groups[0].name
 }
 
 locals {
@@ -91,4 +91,8 @@ output "something" {
 output "thatoutput" {
   value     = data.aws_eks_cluster_auth.clutertoken.token
   sensitive = true
+}
+
+output "node_group_name" {
+  value = local.node_group_name
 }
