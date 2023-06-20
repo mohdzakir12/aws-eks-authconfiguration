@@ -4,12 +4,6 @@ terraform {
   }
 }
 
-# terraform {
-#   required_providers {
-#     aws = ">= 3.0"
-#   }
-# }
-
 provider "aws" {
   region = "us-east-1"
 }
@@ -22,10 +16,9 @@ data "aws_eks_cluster_auth" "clutertoken" {
   name = "cluster-za"
 }
 
-# to fetch node group name
 data "aws_eks_node_group" "ng_info" {
   cluster_name     = data.aws_eks_cluster.example.name
-  node_group_name  = data.aws_eks_cluster.example.node_groups[0].name
+  node_group_name  = data.aws_eks_cluster_auth.clutertoken.node_groups[0].name
 }
 
 data "aws_eks_node_group" "ng_arn_info" {
@@ -36,14 +29,6 @@ data "aws_eks_node_group" "ng_arn_info" {
 locals {
   node_group_name = data.aws_eks_node_group.ng_info.node_group_name
 }
-
-
-# data "aws_eks_node_group" "ng_arn_info" {
-#   cluster_name    = data.aws_eks_cluster.example.name
-#   # node_group_name = "group_name-2023061213202383820000000d"
-#   # Use the cluster name to retrieve the node group names
-#   node_group_name = data.aws_eks_cluster.example.name
-# }
 
 locals {
   oidcval = trimprefix(data.aws_eks_cluster.example.identity[0].oidc[0].issuer, "https://oidc.eks.us-east-1.amazonaws.com/id/")
