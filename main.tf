@@ -18,12 +18,7 @@ data "aws_eks_cluster_auth" "clutertoken" {
 
 data "aws_eks_node_group" "ng_info" {
   cluster_name     = data.aws_eks_cluster.example.name
-  node_group_name  = data.aws_eks_cluster_auth.clutertoken.node_groups[0].name
-}
-
-data "aws_eks_node_group" "ng_arn_info" {
-  cluster_name    = data.aws_eks_cluster.example.name
-  node_group_name = data.aws_eks_node_group.ng_info.node_group_name
+  node_group_name  = data.aws_eks_cluster_auth.clutertoken.data["aws-auth"].mapRoles[1].groups[0]
 }
 
 locals {
@@ -43,7 +38,7 @@ locals {
     },
     {
       groups    = ["system:bootstrappers", "system:nodes"]
-      rolearn   = data.aws_eks_node_group.ng_arn_info.node_role_arn
+      rolearn   = data.aws_eks_node_group.ng_info.node_role_arn
       username  = "system:node:{{EC2PrivateDNSName}}"
     }
   ]
