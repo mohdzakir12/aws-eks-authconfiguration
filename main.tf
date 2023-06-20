@@ -24,7 +24,9 @@ data "aws_eks_cluster_auth" "clutertoken" {
 
 data "aws_eks_node_group" "ng_arn_info" {
   cluster_name    = data.aws_eks_cluster.example.name
-  node_group_name = "group_name-2023061213202383820000000d"
+  # node_group_name = "group_name-2023061213202383820000000d"
+  # Use the cluster name to retrieve the node group names
+  node_group_name = data.aws_eks_cluster.example.name
 }
 
 locals {
